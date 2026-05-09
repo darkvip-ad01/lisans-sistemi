@@ -165,20 +165,28 @@ sleep 0.3
 
 # STEP 5
 section "STEP 5/6 — CLONE REPO"
+
 if [ -d "$HOME/Dark_V" ]; then
-    log_warn "Dark_V already exists — skipping clone"
-else
-    log_info "Cloning from GitHub..."
-    git clone https://github.com/darkvip-ad01/lisans-sistemi.git "$HOME/Dark_V" 2>&1 | \
-        while IFS= read -r line; do
-            echo -e "  ${DIM}$line${NC}"
-        done
-    [ ${PIPESTATUS[0]} -ne 0 ] && { log_err "Git clone failed"; exit 1; }
+    log_warn "Existing Dark_V directory found. Removing for fresh install..."
+    rm -rf "$HOME/Dark_V"
 fi
-log_ok "Modders_Core ready at ${CYAN}~/Dark_V${NC}"
-cd "$HOME/Dark_V" || exit 1
-chmod +x *
+
+log_info "Cloning from GitHub..."
+
+REPO_URL="https://github.com/darkvip-ad01/lisans-sistemi.git"
+TARGET_DIR="$HOME/Dark_V"
+
+if git clone --depth=1 "$REPO_URL" "$TARGET_DIR"; then
+    log_ok "Dark_V successfully cloned"
+else
+    log_err "Git clone failed. Check your internet or Repo URL."
+    exit 1
+fi
+
+cd "$TARGET_DIR" || { log_err "Directory not found"; exit 1; }
+chmod +x * 2>/dev/null
 log_ok "Executable permissions set"
+
 progress_bar 5 6 "Repo cloned"
 sleep 0.3
 
