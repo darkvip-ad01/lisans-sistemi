@@ -169,7 +169,7 @@ if [ -d "$HOME/Dark_V" ]; then
     log_warn "Dark_V already exists — skipping clone"
 else
     log_info "Cloning from GitHub..."
-    git clone https://github.com/darkvip-ad01/lisans-sistemi.git"$HOME/Dark_V" 2>&1 | \
+    git clone https://github.com/darkvip-ad01/lisans-sistemi.git "$HOME/Dark_V" 2>&1 | \
         while IFS= read -r line; do
             echo -e "  ${DIM}$line${NC}"
         done
